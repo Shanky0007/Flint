@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #335441;
-  --color-accent: #46704a;
-  --color-muted: #a9b782;
-  --color-primary-50: #f9f6ee;
-  --color-primary-100: #efe7d4;
-  --color-primary-200: #e4d7b4;
-  --color-primary-300: #ccbf9d;
-  --color-primary-400: #deae48;
-  --color-primary-500: #a9b782;
-  --color-primary-600: #6b8f60;
-  --color-primary-700: #46704a;
-  --color-primary-800: #3c6040;
-  --color-primary-900: #335441;
-  --color-dark-bg: #0a0a0a;
-  --color-dark-surface: #1a1a1a;
-  --color-dark-text: #f9f6ee;
-  --color-dark-text-secondary: #ccbf9d;
-  --color-dark-border: #2e2e2e;
+  --color-primary: #FF6B81;
+  --color-accent: #FFA8B5;
+  --color-muted: #FFCDD2;
+  
+  /* Primary Scale - Light to Dark */
+  --color-primary-50: #FFF5F7;
+  --color-primary-100: #FFE8EC;
+  --color-primary-200: #FFD1D9;
+  --color-primary-300: #FFB3BF;
+  --color-primary-400: #FF8FA2;
+  --color-primary-500: #FF6B81;
+  --color-primary-600: #FF4D6B;
+  --color-primary-700: #E63E5A;
+  --color-primary-800: #CC2F47;
+  --color-primary-900: #B32139;
+  
+  /* Dark Mode Colors */
+  --color-dark-bg: #1A0E13;
+  --color-dark-surface: #2A1820;
+  --color-dark-text: #FFF5F7;
+  --color-dark-text-secondary: #FFD1D9;
+  --color-dark-border: #3D2630;
 }
 
 @variant dark (&:where(.dark, .dark *));
