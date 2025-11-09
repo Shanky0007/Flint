@@ -10,6 +10,8 @@ import { useRouter } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { useAuth } from "../../lib/AuthContext";
 import apiClient from "../../lib/api-client";
+import Loader from "../../components/Loader";
+import { SkeletonCard } from "../../components/Skeleton";
 
 interface CollegeRequest {
   id: string;
@@ -98,7 +100,11 @@ export default function PendingRequestsScreen() {
   if (authLoading || loading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <View style={styles.list}>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </View>
       </View>
     );
   }

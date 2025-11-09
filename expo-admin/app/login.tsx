@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../lib/AuthContext";
@@ -80,6 +81,13 @@ export default function LoginScreen() {
             onPress={handleLogin}
             disabled={loading}
           >
+            {loading && (
+              <ActivityIndicator
+                size="small"
+                color="#fff"
+                style={{ marginRight: 8 }}
+              />
+            )}
             <Text style={styles.buttonText}>
               {loading ? "Signing In..." : "Sign In"}
             </Text>
@@ -129,6 +137,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     marginTop: 8,
     backgroundColor: "#335441",
   },

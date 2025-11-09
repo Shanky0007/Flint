@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { useAuth } from "../../lib/AuthContext";
 import apiClient from "../../lib/api-client";
+import { SkeletonCard } from "../../components/Skeleton";
 
 interface College {
   id: string;
@@ -50,7 +51,11 @@ export default function HistoryScreen() {
   if (authLoading || loading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <View style={styles.list}>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </View>
       </View>
     );
   }

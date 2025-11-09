@@ -5,6 +5,8 @@ import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import PasswordInput from "../../components/ui/PasswordInput";
 import CustomDropdown from "../../components/ui/CustomDropdown";
+import Loader from "../../components/ui/Loader";
+import { SkeletonCard } from "../../components/ui/Skeleton";
 import apiClient from "../../lib/api-client";
 
 interface College {
@@ -26,6 +28,7 @@ export default function LoginPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetchingColleges, setFetchingColleges] = useState(true);
 
   useEffect(() => {
     fetchColleges();
@@ -37,6 +40,8 @@ export default function LoginPage() {
       setColleges(response.data);
     } catch (err) {
       console.error("Failed to fetch colleges", err);
+    } finally {
+      setFetchingColleges(false);
     }
   };
 
@@ -79,6 +84,20 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  if (fetchingColleges) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md">
+            <SkeletonCard />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -157,8 +176,9 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-primary dark:bg-primary-500 text-white rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-primary dark:bg-primary-500 text-white rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                {loading && <Loader size="sm" />}
                 {loading ? "Signing In..." : "Sign In"}
               </button>
             </form>

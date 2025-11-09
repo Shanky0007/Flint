@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
+import Loader from "../../components/ui/Loader";
 import apiClient from "../../lib/api-client";
 
 export default function RequestCollegePage() {
@@ -166,8 +167,9 @@ export default function RequestCollegePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-primary dark:bg-primary-500 text-white rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-primary dark:bg-primary-500 text-white rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                {loading && <Loader size="sm" />}
                 {loading ? "Submitting..." : "Submit Request"}
               </button>
             </form>
