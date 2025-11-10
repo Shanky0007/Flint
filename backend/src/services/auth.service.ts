@@ -136,6 +136,7 @@ export const authService = {
         username: user.username,
         email: user.email,
         bio: user.bio,
+        gender: user.gender,
         interests: user.interests,
         photos: user.photos,
         isAdmin: Boolean(user.isAdmin),
