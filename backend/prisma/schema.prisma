@@ -20,15 +20,27 @@ model College {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  username    String   @unique
-  email       String   @unique
-  password    String
-  isAdmin     Boolean  @default(false)
-  isOnboarded Boolean  @default(false)
-  collegeId   String   @db.ObjectId
-  college     College  @relation(fields: [collegeId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  username          String   @unique
+  email             String   @unique
+  password          String
+  isAdmin           Boolean  @default(false)
+  isOnboarded       Boolean  @default(false)
+  
+  // Profile fields
+  bio               String?
+  interests         String[]
+  photos            String[]
+  
+  // Preferences
+  preferredAgeMin   Int      @default(18)
+  preferredAgeMax   Int      @default(30)
+  preferredDistance Int      @default(50)
+  preferredGender   String   @default("all")
+  
+  collegeId         String   @db.ObjectId
+  college           College  @relation(fields: [collegeId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

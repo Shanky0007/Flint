@@ -77,7 +77,13 @@ export default function LoginPage() {
       });
 
       login(response.data.token, response.data.user);
-      navigate("/dashboard");
+      
+      // Redirect based on onboarding status
+      if (response.data.user.isOnboarded) {
+        navigate("/dashboard");
+      } else {
+        navigate("/onboarding/profile-setup");
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

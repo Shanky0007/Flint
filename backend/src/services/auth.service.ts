@@ -134,4 +134,111 @@ export const authService = {
       },
     };
   },
+
+  async updateProfileSetup(
+    userId: string,
+    data: {
+      bio: string;
+      interests: string[];
+      photos: string[];
+    }
+  ) {
+    const { bio, interests, photos } = data;
+
+    if (!bio || bio.trim().length === 0) {
+      throw new Error("Bio is required");
+    }
+
+    if (!interests || interests.length === 0) {
+      throw new Error("At least one interest is required");
+    }
+
+    if (!photos || photos.length === 0) {
+      throw new Error("At least one photo is required");
+    }
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        bio: bio.trim(),
+        interests,
+        photos,
+      },
+      include: {
+        college: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        isAdmin: Boolean(user.isAdmin),
+        isOnboarded: Boolean(user.isOnboarded),
+        college: user.college,
+      },
+    };
+  },
+
+  async updatePreferences(
+    userId: string,
+    data: {
+      preferredAgeMin: number;
+      preferredAgeMax: number;
+      preferredDistance: number;
+      preferredGender: string;
+    }
+  ) {
+    const { preferredAgeMin, preferredAgeMax, preferredDistance, preferredGender } = data;
+
+    if (preferredAgeMin > preferredAgeMax) {
+      throw new Error("Minimum age cannot be greater than maximum age");
+    }
+
+    if (preferredAgeMin < 18 || preferredAgeMax > 100) {
+      throw new Error("Age must be between 18 and 100");
+    }
+
+    if (!["male", "female", "all"].includes(preferredGender)) {
+      throw new Error("Invalid gender preference");
+    }
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        preferredAgeMin,
+        preferredAgeMax,
+        preferredDistance,
+        preferredGender,
+        isOnboarded: true,
+      },
+      include: {
+        college: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        isAdmin: Boolean(user.isAdmin),
+        isOnboarded: Boolean(user.isOnboarded),
+        college: user.college,
+      },
+    };
+  },
 };
