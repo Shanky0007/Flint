@@ -41,7 +41,7 @@ export default function ProfileSetupPage() {
     setError("");
 
     const validInterests = formData.interests.filter((i) => i.trim() !== "");
-    
+
     if (!formData.bio.trim()) {
       setError("Bio is required");
       return;
@@ -53,7 +53,7 @@ export default function ProfileSetupPage() {
     }
 
     if (formData.photos.length === 0) {
-      setError("At least one photo is required");
+      setError("Profile photo is required");
       return;
     }
 
@@ -70,7 +70,7 @@ export default function ProfileSetupPage() {
       if (token && user) {
         login(token, { ...user, ...response.data.user });
       }
-      
+
       navigate("/onboarding/preferences");
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to update profile");
@@ -98,7 +98,7 @@ export default function ProfileSetupPage() {
                 </p>
               </div>
             </div>
-            
+
             {/* Progress */}
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-primary dark:bg-primary-500 rounded-full"></div>
@@ -181,14 +181,14 @@ export default function ProfileSetupPage() {
             {/* Photos */}
             <div>
               <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-                Photos <span className="text-red-500">*</span>
+                Profile Photo <span className="text-red-500">*</span>
               </label>
               <PhotoUpload
                 photos={formData.photos}
                 onPhotosChange={(photos) =>
                   setFormData({ ...formData, photos })
                 }
-                maxPhotos={6}
+                maxPhotos={1}
               />
             </div>
 
