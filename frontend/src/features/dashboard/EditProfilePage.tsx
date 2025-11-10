@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import { useAuth } from "../../lib/AuthContext";
 import apiClient from "../../lib/api-client";
 import Loader from "../../components/ui/Loader";
@@ -21,7 +21,7 @@ export default function EditProfilePage() {
     gender: user?.gender || "male",
     interests:
       user?.interests && user.interests.length > 0 ? user.interests : [""],
-    photos: user?.photos || [],
+    photos: user?.photos && user.photos.length > 0 ? user.photos : [],
     preferences: {
       lookingFor: user?.preferences?.lookingFor || "friendship",
       ageRange: {
@@ -116,7 +116,6 @@ export default function EditProfilePage() {
         preferences: formData.preferences,
       });
 
-      // Update user in context
       if (token) {
         login(token, response.data.user);
       }
@@ -135,137 +134,138 @@ export default function EditProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-dark-bg dark:via-dark-surface dark:to-dark-bg">
-      {/* Header */}
-      <div className="bg-white/80 dark:bg-dark-surface/80 backdrop-blur-lg border-b border-primary-200 dark:border-dark-border sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="p-2 hover:bg-primary-100 dark:hover:bg-dark-border rounded-full transition-colors"
-            >
-              <ArrowLeft className="w-6 h-6 text-[#1A1A1A] dark:text-dark-text" />
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold text-[#1A1A1A] dark:text-dark-text">
-                Edit Profile
-              </h1>
-              <p className="text-sm text-[#4A4A4A] dark:text-dark-text-secondary">
-                Update your profile information
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-dark-bg dark:via-dark-surface dark:to-dark-bg pb-20">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-20 bg-white/95 dark:bg-dark-surface/95 backdrop-blur-lg border-b border-primary-200 dark:border-dark-border shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="p-2 hover:bg-primary-100 dark:hover:bg-dark-border rounded-full transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-[#1A1A1A] dark:text-dark-text" />
+              </button>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-[#1A1A1A] dark:text-dark-text">
+                  Edit Profile
+                </h1>
+                <p className="text-xs sm:text-sm text-[#4A4A4A] dark:text-dark-text-secondary">
+                  Update your information
+                </p>
+              </div>
             </div>
+            <button
+              onClick={handleSubmit}
+              disabled={loading || success}
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-primary to-primary-700 dark:from-primary-500 dark:to-primary-700 text-white rounded-xl font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-sm sm:text-base"
+            >
+              {loading ? (
+                <Loader size="sm" />
+              ) : success ? (
+                "Saved! ✓"
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  <span className="hidden sm:inline">Save</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white dark:bg-dark-surface rounded-3xl shadow-xl p-8 border border-primary-200 dark:border-dark-border space-y-6"
-        >
-          {error && (
-            <div className="p-4 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="p-4 bg-green-100 dark:bg-green-900/20 border border-green-300 dark:border-green-800 rounded-lg text-green-700 dark:text-green-400">
-              Profile updated successfully! Redirecting...
-            </div>
-          )}
-
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-              Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full px-4 py-3 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text"
-              placeholder="Your name"
-            />
+      {/* Form Content */}
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {error && (
+          <div className="p-4 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm">
+            {error}
           </div>
+        )}
 
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-              Username <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.username}
-              onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
-              }
-              className="w-full px-4 py-3 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text"
-              placeholder="username"
-            />
+        {success && (
+          <div className="p-4 bg-green-100 dark:bg-green-900/20 border border-green-300 dark:border-green-800 rounded-xl text-green-700 dark:text-green-400 text-sm">
+            Profile updated successfully! Redirecting...
           </div>
+        )}
 
-          {/* Email (Read-only) */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-              Email (Cannot be changed)
-            </label>
-            <input
-              type="email"
-              value={user.email}
-              disabled
-              className="w-full px-4 py-3 bg-primary-50 dark:bg-dark-bg border border-primary-200 dark:border-dark-border rounded-lg text-[#4A4A4A] dark:text-dark-text-secondary cursor-not-allowed"
-            />
-          </div>
-
-          {/* Gender */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-3">
-              Gender <span className="text-red-500">*</span>
-            </label>
-            <div className="grid grid-cols-3 gap-3">
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, gender: "male" })}
-                className={`py-3 px-4 rounded-lg border-2 transition-all ${
-                  formData.gender === "male"
-                    ? "border-primary dark:border-primary-500 bg-primary/10 dark:bg-primary-500/20 text-primary dark:text-primary-500 font-semibold"
-                    : "border-primary-200 dark:border-dark-border text-[#4A4A4A] dark:text-dark-text-secondary hover:border-primary dark:hover:border-primary-500"
-                }`}
-              >
-                Male
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, gender: "female" })}
-                className={`py-3 px-4 rounded-lg border-2 transition-all ${
-                  formData.gender === "female"
-                    ? "border-primary dark:border-primary-500 bg-primary/10 dark:bg-primary-500/20 text-primary dark:text-primary-500 font-semibold"
-                    : "border-primary-200 dark:border-dark-border text-[#4A4A4A] dark:text-dark-text-secondary hover:border-primary dark:hover:border-primary-500"
-                }`}
-              >
-                Female
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, gender: "transgender" })
+        {/* Basic Information */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text mb-4">
+            Basic Information
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
+                Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
                 }
-                className={`py-3 px-4 rounded-lg border-2 transition-all ${
-                  formData.gender === "transgender"
-                    ? "border-primary dark:border-primary-500 bg-primary/10 dark:bg-primary-500/20 text-primary dark:text-primary-500 font-semibold"
-                    : "border-primary-200 dark:border-dark-border text-[#4A4A4A] dark:text-dark-text-secondary hover:border-primary dark:hover:border-primary-500"
-                }`}
-              >
-                Transgender
-              </button>
+                className="w-full px-4 py-3 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text"
+                placeholder="Your name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
+                Username <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text"
+                placeholder="username"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
+                Email (Cannot be changed)
+              </label>
+              <input
+                type="email"
+                value={user.email}
+                disabled
+                className="w-full px-4 py-3 bg-primary-50 dark:bg-dark-bg border border-primary-200 dark:border-dark-border rounded-lg text-[#4A4A4A] dark:text-dark-text-secondary cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-3">
+                Gender <span className="text-red-500">*</span>
+              </label>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {["male", "female", "transgender"].map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, gender: g })}
+                    className={`py-2.5 sm:py-3 px-2 sm:px-4 rounded-lg border-2 transition-all capitalize text-sm sm:text-base ${
+                      formData.gender === g
+                        ? "border-primary dark:border-primary-500 bg-primary/10 dark:bg-primary-500/20 text-primary dark:text-primary-500 font-semibold"
+                        : "border-primary-200 dark:border-dark-border text-[#4A4A4A] dark:text-dark-text-secondary hover:border-primary dark:hover:border-primary-500"
+                    }`}
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Bio */}
+        {/* About You */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text mb-4">
+            About You
+          </h2>
           <div>
             <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
               Bio <span className="text-red-500">*</span>
@@ -276,7 +276,7 @@ export default function EditProfilePage() {
                 setFormData({ ...formData, bio: e.target.value })
               }
               placeholder="Tell us about yourself..."
-              rows={4}
+              rows={5}
               maxLength={500}
               className="w-full px-4 py-3 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text resize-none"
             />
@@ -284,67 +284,65 @@ export default function EditProfilePage() {
               {formData.bio.length}/500 characters
             </p>
           </div>
+        </div>
 
-          {/* Interests */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-              Interests <span className="text-red-500">*</span>
-            </label>
-            <div className="space-y-2">
-              {formData.interests.map((interest, index) => (
-                <div key={index} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={interest}
-                    onChange={(e) =>
-                      handleInterestChange(index, e.target.value)
-                    }
-                    placeholder={`Interest ${index + 1}`}
-                    maxLength={50}
-                    className="flex-1 px-4 py-2 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text"
-                  />
-                  {formData.interests.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveInterest(index)}
-                      className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/30 transition-colors"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            {formData.interests.length < 10 && (
-              <button
-                type="button"
-                onClick={handleAddInterest}
-                className="mt-2 text-sm text-primary dark:text-primary-500 hover:underline"
-              >
-                + Add another interest
-              </button>
-            )}
+        {/* Profile Photo */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text mb-4">
+            Profile Photo
+          </h2>
+          <PhotoUpload
+            photos={formData.photos}
+            onPhotosChange={(photos) => setFormData({ ...formData, photos })}
+            maxPhotos={1}
+          />
+        </div>
+
+        {/* Interests */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text mb-4">
+            Interests
+          </h2>
+          <div className="space-y-3">
+            {formData.interests.map((interest, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  value={interest}
+                  onChange={(e) => handleInterestChange(index, e.target.value)}
+                  placeholder={`Interest ${index + 1}`}
+                  maxLength={50}
+                  className="flex-1 px-4 py-2.5 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-500 text-[#1A1A1A] dark:text-dark-text text-sm sm:text-base"
+                />
+                {formData.interests.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveInterest(index)}
+                    className="px-3 sm:px-4 py-2.5 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/30 transition-colors font-medium text-sm"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
+          {formData.interests.length < 10 && (
+            <button
+              type="button"
+              onClick={handleAddInterest}
+              className="mt-3 text-sm text-primary dark:text-primary-500 hover:underline font-medium"
+            >
+              + Add another interest
+            </button>
+          )}
+        </div>
 
-          {/* Profile Photo */}
-          <div>
-            <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
-              Profile Photo <span className="text-red-500">*</span>
-            </label>
-            <PhotoUpload
-              photos={formData.photos}
-              onPhotosChange={(photos) => setFormData({ ...formData, photos })}
-              maxPhotos={1}
-            />
-          </div>
-
-          {/* Preferences */}
-          <div className="space-y-4 p-6 bg-gradient-to-br from-primary-50 to-white dark:from-dark-bg dark:to-dark-surface rounded-2xl border border-primary-200 dark:border-dark-border">
-            <h3 className="text-lg font-semibold text-[#1A1A1A] dark:text-dark-text">
-              Dating Preferences
-            </h3>
-
-            {/* Looking For */}
+        {/* Dating Preferences */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-[#1A1A1A] dark:text-dark-text mb-4">
+            Dating Preferences
+          </h2>
+          <div className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
                 Looking For
@@ -355,14 +353,17 @@ export default function EditProfilePage() {
                 onChange={(value) =>
                   setFormData({
                     ...formData,
-                    preferences: { ...formData.preferences, lookingFor: value },
+                    preferences: {
+                      ...formData.preferences,
+                      lookingFor: value,
+                    },
                   })
                 }
                 placeholder="Select what you're looking for"
+                searchable={false}
               />
             </div>
 
-            {/* Age Range */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
@@ -414,7 +415,6 @@ export default function EditProfilePage() {
               </div>
             </div>
 
-            {/* Distance */}
             <div>
               <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
                 Distance: {formData.preferences.distance} km
@@ -441,7 +441,6 @@ export default function EditProfilePage() {
               </div>
             </div>
 
-            {/* Gender Preference */}
             <div>
               <label className="block text-sm font-medium text-[#4A4A4A] dark:text-dark-text-secondary mb-2">
                 Gender Preference
@@ -459,30 +458,11 @@ export default function EditProfilePage() {
                   })
                 }
                 placeholder="Select gender preference"
+                searchable={false}
               />
             </div>
           </div>
-
-          {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard")}
-              disabled={loading}
-              className="flex-1 py-3 bg-primary-100 dark:bg-dark-border text-[#1A1A1A] dark:text-dark-text rounded-lg font-semibold hover:bg-primary-200 dark:hover:bg-dark-border/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading || success}
-              className="flex-1 py-3 bg-gradient-to-r from-primary to-primary-700 dark:from-primary-500 dark:to-primary-700 text-white rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading && <Loader size="sm" />}
-              {loading ? "Saving..." : success ? "Saved! ✓" : "Save Changes"}
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );

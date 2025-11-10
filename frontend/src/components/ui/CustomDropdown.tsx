@@ -26,9 +26,26 @@ export default function CustomDropdown({
 }: CustomDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [openUpward, setOpenUpward] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.id === value);
+
+  // Check if dropdown should open upward
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      // If less than 300px space below and more space above, open upward
+      if (spaceBelow < 300 && spaceAbove > spaceBelow) {
+        setOpenUpward(true);
+      } else {
+        setOpenUpward(false);
+      }
+    }
+  }, [isOpen]);
 
   const filteredOptions = searchable
     ? options.filter(
@@ -92,7 +109,11 @@ export default function CustomDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg shadow-xl max-h-80 overflow-hidden">
+        <div
+          className={`absolute z-50 w-full ${
+            openUpward ? "bottom-full mb-2" : "top-full mt-2"
+          } bg-white dark:bg-dark-surface border border-primary-200 dark:border-dark-border rounded-lg shadow-xl max-h-80 overflow-hidden`}
+        >
           {searchable && (
             <div className="p-3 border-b border-primary-200 dark:border-dark-border">
               <div className="relative">
