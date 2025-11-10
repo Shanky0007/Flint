@@ -6,8 +6,11 @@ import SignupPage from "./features/auth/SignupPage";
 import LoginPage from "./features/auth/LoginPage";
 import RequestCollegePage from "./features/college/RequestCollegePage";
 import DashboardPage from "./features/dashboard/DashboardPage";
+import ProfileSetupPage from "./features/onboarding/ProfileSetupPage";
+import PreferencesPage from "./features/onboarding/PreferencesPage";
 import { AuthProvider } from "./lib/AuthContext";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import OnboardingRoute from "./components/layout/OnboardingRoute";
 
 function App() {
   return (
@@ -20,6 +23,22 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/request-college" element={<RequestCollegePage />} />
+              <Route
+                path="/onboarding/profile-setup"
+                element={
+                  <OnboardingRoute>
+                    <ProfileSetupPage />
+                  </OnboardingRoute>
+                }
+              />
+              <Route
+                path="/onboarding/preferences"
+                element={
+                  <OnboardingRoute>
+                    <PreferencesPage />
+                  </OnboardingRoute>
+                }
+              />
               <Route
                 path="/dashboard"
                 element={

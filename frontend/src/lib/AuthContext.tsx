@@ -1,11 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import axios from "axios";
+import apiClient from "./api-client";
 
 interface User {
   id: string;
@@ -42,7 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
+      // set Authorization header for both default axios and the apiClient instance
       axios.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
     }
     setIsLoading(false);
   }, []);
@@ -53,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(newUser));
     axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
   };
 
   const logout = () => {
@@ -61,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     delete axios.defaults.headers.common["Authorization"];
+    delete apiClient.defaults.headers.common["Authorization"];
   };
 
   return (

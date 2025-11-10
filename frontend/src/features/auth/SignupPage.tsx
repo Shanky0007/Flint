@@ -92,7 +92,7 @@ export default function SignupPage() {
       });
 
       login(response.data.token, response.data.user);
-      navigate("/dashboard");
+      navigate("/onboarding/profile-setup");
     } catch (err: any) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {

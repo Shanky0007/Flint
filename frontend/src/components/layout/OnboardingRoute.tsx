@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../lib/AuthContext";
 
-export default function ProtectedRoute({
+export default function OnboardingRoute({
   children,
 }: {
   children: React.ReactNode;
@@ -20,8 +20,8 @@ export default function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.isOnboarded) {
-    return <Navigate to="/onboarding/profile-setup" replace />;
+  if (user.isOnboarded) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
