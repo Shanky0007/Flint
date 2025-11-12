@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { User, LogOut, Edit, IdCard, ChevronDown } from "lucide-react";
+import { User, LogOut, Edit, IdCard, ChevronDown, Flame, Heart } from "lucide-react";
 import { useAuth } from "../../lib/AuthContext";
 
 export default function Navbar() {
@@ -39,8 +39,27 @@ export default function Navbar() {
           {/* Navigation */}
           <div className="flex items-center gap-6">
             {user ? (
-              /* Logged In - Profile Dropdown */
-              <div className="relative" ref={dropdownRef}>
+              <>
+                {/* Discover Link */}
+                <Link
+                  to="/discover"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-xl font-semibold transition-colors shadow-lg"
+                >
+                  <Flame className="w-5 h-5" />
+                  <span className="hidden sm:inline">Discover</span>
+                </Link>
+
+                {/* Matches Link */}
+                <Link
+                  to="/matches"
+                  className="flex items-center gap-2 px-4 py-2 border-2 border-primary hover:bg-primary-50 dark:hover:bg-dark-border text-primary dark:text-primary-400 rounded-xl font-semibold transition-colors"
+                >
+                  <Heart className="w-5 h-5" fill="currentColor" />
+                  <span className="hidden sm:inline">Matches</span>
+                </Link>
+
+                {/* Profile Dropdown */}
+                <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center gap-3 px-4 py-2  rounded-xl border-2 border-dark-border hover:bg-primary-50 dark:hover:bg-dark-border transition-colors"
@@ -124,6 +143,7 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
+              </>
             ) : (
               /* Not Logged In - Nav Links */
               <>

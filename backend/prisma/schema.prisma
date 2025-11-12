@@ -42,6 +42,46 @@ model User {
   
   collegeId         String   @db.ObjectId
   college           College  @relation(fields: [collegeId], references: [id])
+  
+  // Swipe and Match relations
+  swipesMade        Swipe[]  @relation("UserSwipes")
+  swipesReceived    Swipe[]  @relation("UserSwiped")
+  matchesAsUser1    Match[]  @relation("MatchesAsUser1")
+  matchesAsUser2    Match[]  @relation("MatchesAsUser2")
+  
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model Swipe {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  swiperId    String    @db.ObjectId
+  swipedId    String    @db.ObjectId
+  type        SwipeType
+  createdAt   DateTime  @default(now())
+  
+  swiper      User      @relation("UserSwipes", fields: [swiperId], references: [id], onDelete: Cascade)
+  swiped      User      @relation("UserSwiped", fields: [swipedId], references: [id], onDelete: Cascade)
+  
+  @@unique([swiperId, swipedId])
+  @@map("swipes")
+}
+
+enum SwipeType {
+  LEFT
+  RIGHT
+  UP
+}
+
+model Match {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user1Id     String   @db.ObjectId
+  user2Id     String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  
+  user1       User     @relation("MatchesAsUser1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2       User     @relation("MatchesAsUser2", fields: [user2Id], references: [id], onDelete: Cascade)
+  
+  @@unique([user1Id, user2Id])
+  @@map("matches")
 }

@@ -10,6 +10,8 @@ import EditProfilePage from "./features/dashboard/EditProfilePage";
 import ProfileCardPage from "./features/profile/ProfileCardPage";
 import ProfileSetupPage from "./features/onboarding/ProfileSetupPage";
 import PreferencesPage from "./features/onboarding/PreferencesPage";
+import DiscoverPage from "./features/discover/DiscoverPage";
+import MatchesPage from "./features/matches/MatchesPage";
 import { AuthProvider } from "./lib/AuthContext";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import OnboardingRoute from "./components/layout/OnboardingRoute";
@@ -76,6 +78,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <EditProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/discover"
+                element={
+                  <ProtectedRoute>
+                    <DiscoverPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/matches"
+                element={
+                  <ProtectedRoute>
+                    <MatchesPage />
                   </ProtectedRoute>
                 }
               />
