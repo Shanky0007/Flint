@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { Heart, User, LogOut, Edit, IdCard, ChevronDown } from "lucide-react";
+import { User, LogOut, Edit, IdCard, ChevronDown } from "lucide-react";
 import { useAuth } from "../../lib/AuthContext";
 
 export default function Navbar() {
@@ -84,17 +84,6 @@ export default function Navbar() {
                     </div>
 
                     <div className="py-2">
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-primary-50 dark:hover:bg-dark-border transition-colors"
-                      >
-                        <User className="w-4 h-4 text-primary dark:text-primary-500" />
-                        <span className="text-sm text-[#1A1A1A] dark:text-dark-text font-medium">
-                          Dashboard
-                        </span>
-                      </Link>
-
                       <Link
                         to="/edit-profile"
                         onClick={() => setIsDropdownOpen(false)}

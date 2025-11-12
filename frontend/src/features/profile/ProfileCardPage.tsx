@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  Mail,
   MapPin,
   Users,
   Heart,
@@ -172,8 +171,8 @@ export default function ProfileCardPage() {
 
             {/* Profile Details */}
             <div className="mt-8 space-y-6">
-              {/* College, Email & Gender */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* College & Gender */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 p-4 bg-primary-50 dark:bg-dark-bg rounded-xl">
                   <div className="w-10 h-10 rounded-full bg-primary dark:bg-primary-500 flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-white" />
@@ -187,22 +186,6 @@ export default function ProfileCardPage() {
                     </p>
                   </div>
                 </div>
-
-                {isOwnProfile && (
-                  <div className="flex items-center gap-3 p-4 bg-primary-50 dark:bg-dark-bg rounded-xl">
-                    <div className="w-10 h-10 rounded-full bg-primary dark:bg-primary-500 flex items-center justify-center">
-                      <Mail className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[#4A4A4A] dark:text-dark-text-secondary">
-                        Email
-                      </p>
-                      <p className="text-sm font-semibold text-[#1A1A1A] dark:text-dark-text break-all">
-                        {profileUser.email}
-                      </p>
-                    </div>
-                  </div>
-                )}
 
                 {profileUser.gender && (
                   <div className="flex items-center gap-3 p-4 bg-primary-50 dark:bg-dark-bg rounded-xl">
